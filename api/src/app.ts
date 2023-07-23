@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { createClient } from 'redis';
+import 'dotenv/config'
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -20,7 +21,6 @@ const redisClient = createClient({
 app.post('/increment', async (req: Request, res: Response) => {
   try {
     const baseLocation: string = req.body.baseLocation;
-
     res.status(200).json({ count: await redisClient.incr(baseLocation) });
   } catch (err) {
     console.error('Error incrementing visitor count:', err);
