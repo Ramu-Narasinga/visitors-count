@@ -15,6 +15,7 @@ const redisClient = createClient({
 
 try {
   (async () => {
+    console.log("process.env.redisUrl", process.env.redisUrl);
     await redisClient.connect();
   })();
 } catch(err) {
@@ -37,6 +38,6 @@ app.post('/increment', async (req: Request, res: Response) => {
   }
 });
 
-app.listen(port, () => {
+export default app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
