@@ -13,9 +13,18 @@ const redisClient = createClient({
   url: process.env.redisUrl
 });
 
-(async () => {
-  await redisClient.connect();
-})();
+try {
+  (async () => {
+    await redisClient.connect();
+  })();
+} catch(err) {
+  console.error("Error in connecting to redis", err);
+}
+
+const runningMessage = `Server running at http://localhost:${port}`;
+app.get('/', (req: express.Request, res: express.Response) => {
+    res.status(200).send(runningMessage)
+});
 
 // Increment visitor count for the base location
 app.post('/increment', async (req: Request, res: Response) => {
