@@ -23,8 +23,8 @@ try {
 }
 
 const runningMessage = `Server running at http://localhost:${port}`;
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.status(200).send(`redis data: ${redisClient.get('http://localhost:3000')}`)
+app.get('/', async (req: express.Request, res: express.Response) => {
+    res.status(200).send(`redis data: ${await redisClient.get('http://localhost:3000')}`)
 });
 
 // Increment visitor count for the base location
