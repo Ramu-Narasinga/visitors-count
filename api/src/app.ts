@@ -24,8 +24,13 @@ try {
 
 const runningMessage = `Server running at http://localhost:${port}`;
 app.get('/', async (req: express.Request, res: express.Response) => {
+  try {
   let count = await redisClient.get('http://localhost:3000')
     res.status(200).send(`redis data: ${count}`)
+  } catch (err) {
+    console.error('Error incrementing visitor count:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Increment visitor count for the base location
