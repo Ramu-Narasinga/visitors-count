@@ -17,7 +17,6 @@ const redisClient = createClient({
 
 try {
   (async () => {
-    console.log("process.env.redisUrl", process.env.redisUrl);
     await redisClient.connect();
   })();
 } catch(err) {
