@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { createClient } from 'redis';
 import 'dotenv/config'
+import * as winston from 'winston';
+import * as expressWinston from 'express-winston';
 
 const app = express();
 const port = 3001;
@@ -22,10 +24,33 @@ try {
   console.error("Error in connecting to redis", err);
 }
 
+// here we are preparing the expressWinston logging middleware configuration,
+// which will automatically log all HTTP requests handled by Express.js
+const loggerOptions: expressWinston.LoggerOptions = {
+  transports: [new winston.transports.Console()],
+  format: winston.format.combine(
+      winston.format.json(),
+      winston.format.prettyPrint(),
+      winston.format.colorize({ all: true })
+  ),
+};
+
+if (!process.env.DEBUG) {
+  loggerOptions.meta = false; // when not debugging, log requests as one-liners
+  if (typeof global.it === 'function') {
+      loggerOptions.level = 'http'; // for non-debug test runs, squelch entirely
+  }
+}
+
+// initialize the logger with the above configuration
+app.use(expressWinston.logger(loggerOptions));
+
+
 const runningMessage = `Server running at http://localhost:${port}`;
 app.get('/', async (req: express.Request, res: express.Response) => {
   try {
-  let count = await redisClient.get('http://localhost:3000')
+  let count = 0
+  //  await redisClient.get('http://localhost:3000')
     res.status(200).send(`redis data: ${count}`)
   } catch (err) {
     console.error('Error incrementing visitor count:', err);
