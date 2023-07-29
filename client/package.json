@@ -13,7 +13,8 @@
     "start": "inferno-scripts start",
     "build": "inferno-scripts build",
     "test": "inferno-scripts test",
-    "eject": "inferno-scripts eject"
+    "eject": "inferno-scripts eject",
+    "deploy": "npm run build && firebase deploy"
   },
   "eslintConfig": {
     "extends": "inferno-app"

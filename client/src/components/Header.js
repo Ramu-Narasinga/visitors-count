@@ -11,7 +11,7 @@ export const Header = () => {
       </a>
       
       <a href="https://projects.ramunarasinga.com">
-        <img src="https://visitors-count.onrender.com/api/count/incr/badge.svg?url=https://projects.ramunarasinga.com"/>
+        <img height="28px" src="https://visitors-count.onrender.com/api/count/incr/badge.svg?url=https://projects.ramunarasinga.com"/>
       </a>
     </nav>
   )
