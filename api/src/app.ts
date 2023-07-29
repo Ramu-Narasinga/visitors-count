@@ -4,6 +4,7 @@ import { createClient } from 'redis';
 import 'dotenv/config'
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
+import { updateSvgWithCount } from './utils';
 
 const app = express();
 const port = 3001;
@@ -44,16 +45,24 @@ if (!process.env.DEBUG) {
 // initialize the logger with the above configuration
 app.use(expressWinston.logger(loggerOptions));
 
-// Increment visitor count for the base location
-app.post('/increment', async (req: Request, res: Response) => {
+app.get("/api/count/incr/badge.svg", async (req: Request, res: Response) => {
+
+  // Update SVG with the provided count
+  let updatedSvg = updateSvgWithCount(0);
   try {
-    const baseLocation: string = req.body.baseLocation;
-    res.status(200).json({ count: await redisClient.incr(baseLocation) });
+    const url: string = (req.query.url ? req.query.url : "") as string;
+    const count = await redisClient.incr(url) || 0; 
+    // Update SVG with the provided count
+    updatedSvg = updateSvgWithCount(count);
   } catch (err) {
     console.error('Error incrementing visitor count:', err);
-    res.status(500).json({ error: 'Internal server error' });
   }
-});
+
+  // Set the response Content-Type to "image/svg+xml" for SVG content
+  res.set('Content-Type', 'image/svg+xml');  
+  // Send the updated SVG as the response
+  res.send(updatedSvg);
+})
 
 export default app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
