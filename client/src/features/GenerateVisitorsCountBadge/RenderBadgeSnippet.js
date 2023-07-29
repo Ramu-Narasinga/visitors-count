@@ -19,7 +19,7 @@ export class RenderBadgeSnippet extends Component {
 
     return (
       <>
-        <div class="row justify-content-center py-5">
+        <div class="row justify-content-center py-3">
           <div class="col-9">
             <h4>HTML Link:</h4>
             <div class="row">
@@ -33,7 +33,7 @@ export class RenderBadgeSnippet extends Component {
             </div>
           </div>
         </div>
-        <div class="row justify-content-center py-5">
+        <div class="row justify-content-center py-3">
         <div class="col-9">
           <h4>Markdown Link:</h4>
           <div class="row">
